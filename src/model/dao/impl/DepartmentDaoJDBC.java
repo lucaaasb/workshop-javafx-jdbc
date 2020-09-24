@@ -63,6 +63,12 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 					+ "where Id = ? ");
 			st.setString(1, obj.getName());
 			st.setInt(2, obj.getId());
+			
+			int rowsAffected = st.executeUpdate();
+			
+			if (rowsAffected == 0) {
+				throw new DbException("Unexpected error! No rows affected.");
+			}
 		}
 		catch (SQLException e) {
 			throw new DbException(e.getMessage());
@@ -127,7 +133,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 		try {
 			st = conn.prepareStatement(
 					"select * from department "
-					+ "order by Name");
+					+ "order by Id");
 			rs = st.executeQuery();
 			List<Department> list = new ArrayList<>();
 			while (rs.next()) {
